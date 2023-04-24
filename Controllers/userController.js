@@ -3,6 +3,7 @@ const async = require("async");
 const { body, validationResult, ValidationChain } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
+
 // Handle user sign up on POST
 exports.user_sign_up_post = [
     // Validate and sanitize fields.
@@ -66,3 +67,34 @@ exports.user_sign_up_post = [
           };
     }
     ]
+
+exports.membership_form_post = [
+  // Validate and sanitize fields.
+  body("secretcode", "Code must be specified")
+    .trim()
+    .isLength({min: 1})
+    .escape()
+    .custom(async (value, {req}) => {
+      const secretcode = "test123";
+ 
+      // If value and secretcode not same
+      // don't update and throw error
+      if(value !== secretcode){
+        throw new Error('Not correct!')
+      }  
+    }),
+  
+  // Proces request after validation and sanitization.
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values and error messages.
+        res.render("join-the-club", {
+          title: "Membership",
+          errors: errors,
+        });
+      return;
+    }
+    console.log("succes");
+  }
+]

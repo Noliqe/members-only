@@ -4,6 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config()
+const User = require("./models/user");
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcryptjs");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -30,13 +35,64 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+
+passport.use(
+  new LocalStrategy(async(username, password, done) => {
+    try {
+      const user = await User.findOne({ Username: username });
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      };
+      bcrypt.compare(password, user.Password, (err, res) => {
+        if (res) {
+          // passwords match! log user in
+          return done(null, user)
+        } else {
+          // passwords do not match!
+          return done(null, false, { message: "Incorrect password" })
+        }
+      })
+    } catch(err) {
+      return done(err);
+    };
+  })
+);
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async function(id, done) {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch(err) {
+    done(err);
+  };
+});
+
+
+app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
+
+
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 app.use('/users', usersRouter);
+
+app.use('/', indexRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -48,5 +104,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;

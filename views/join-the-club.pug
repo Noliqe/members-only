@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1= title
+  if user
+      p Welcome to #{user.Username}
+      p To join the club you have to enter the secret code!
+
+      form(method="POST" action="")
+        div.form-group
+          label(for="secretcode") Enter secret code:
+          input#secretcode.form-controler(type="text" name="secretcode" required="true")
+        button.btn.btn-primary(type='submit') Submit
+      if errors 
+        ul 
+          for error in errors.errors
+            li!= error.msg
+  else 
+    p please login 
+      a(href="/") login
