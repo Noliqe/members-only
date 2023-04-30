@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema ({
     title: { type: String, required: true, maxLength: 30 },
-    timestamp: { type: Date  },
+    timestamp: { type: String  },
     text: { type: String, required: true, maxLength: 200 },
-    User: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    Username: { type: String, required: true },
 });
 
 // Export model

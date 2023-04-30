@@ -75,7 +75,7 @@ exports.membership_form_post = [
     .isLength({min: 1})
     .escape()
     .custom(async (value, {req}) => {
-      const secretcode = "test123";
+      const secretcode = "numero";
  
       // If value and secretcode not same
       // don't update and throw error
@@ -92,9 +92,21 @@ exports.membership_form_post = [
         res.render("join-the-club", {
           title: "Membership",
           errors: errors,
+          user: req.user
         });
       return;
     }
+    // Code is correct, update membership
+    User.updateOne(
+      {"_id": req.user._id}, // filter
+      {"$set":{"Membership": true}},
+    )
+    .then(
+      res.redirect("/")
+    )
+    .catch((err) => {
+      return next(err);
+    })
     console.log("succes");
   }
 ]

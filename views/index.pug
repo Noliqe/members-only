@@ -16,4 +16,22 @@ block content
           input#password.form-controler(type="password" name="password" required="true")
         button.btn.btn-primary(type='submit') Log in
       
+    if user
+      if messages 
+        each message in messages 
+          if user.Membership  
+            ul
+              li Username: #{message.Username}
+              li Title: #{message.title}
+              li Text: #{message.text}
+              li Date: #{message.timestamp}
+          else 
+            ul 
+              li Anymouse
+              li Title: #{message.title}
+              li Text: #{message.text}
+      else 
+        p no messages
+    else 
+      p not logged in
       

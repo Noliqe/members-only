@@ -1,14 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const user_controller = require("../Controllers/userController");
+const message_controller = require("../Controllers/messageController");
 const passport = require("passport");
 
 const app = express();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { user: req.user });
-});
+router.get("/", message_controller.messages_list);
 
 /* GET sign up page */
 router.get("/sign-up", (req, res) => res.render("sign-up-form"));
@@ -20,12 +19,17 @@ router.get("/membership", (req, res) => res.render("join-the-club", { user: req.
 
 router.post("/membership", user_controller.membership_form_post);
 
+router.get('/messages', function(req, res, next) {
+  res.render('message-form', { user: req.user });
+});
+router.post("/messages", message_controller.create_message_post);
+
 router.post(
   '/log-in',
   passport.authenticate('local', {
     // session: false,
     failureRedirect: '/',
-    successRedirect: '/membership',
+    successRedirect: '/',
   })
 );
 

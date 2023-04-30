@@ -10,5 +10,10 @@ const UserSchema = new Schema ({
     Membership: {type: Boolean, default: false }
 });
 
+// Virtual for user URL
+UserSchema.virtual("url").get(function () {
+    return `/${this._id}`;
+})
+
 // Export model
 module.exports  = mongoose.model("User", UserSchema);
