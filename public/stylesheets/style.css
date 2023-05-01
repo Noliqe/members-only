@@ -6,3 +6,20 @@ body {
 a {
   color: #00B7FF;
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.header > ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 75vw;
+  align-items: center;
+}
+
+.header > ul > li {
+  list-style: none;
+}

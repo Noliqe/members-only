@@ -72,7 +72,14 @@ passport.deserializeUser(async function(id, done) {
 });
 
 
-app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));
+app.use(session({ 
+  secret: process.env.SECRET, 
+  resave: false, 
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 3600000 //1 hour
+} }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
@@ -83,9 +90,9 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.use('/', indexRouter);
 
 
 // catch 404 and forward to error handler

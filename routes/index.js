@@ -10,7 +10,7 @@ const app = express();
 router.get("/", message_controller.messages_list);
 
 /* GET sign up page */
-router.get("/sign-up", (req, res) => res.render("sign-up-form"));
+router.get("/sign-up", (req, res) => res.render("sign-up-form", {user: req.user}));
 
 /* POST sign up page */
 router.post("/sign-up", user_controller.user_sign_up_post);
@@ -23,6 +23,8 @@ router.get('/messages', function(req, res, next) {
   res.render('message-form', { user: req.user });
 });
 router.post("/messages", message_controller.create_message_post);
+
+router.post('/delete', message_controller.delete_message_post);
 
 router.post(
   '/log-in',

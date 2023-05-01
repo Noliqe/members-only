@@ -10,7 +10,6 @@ exports.messages_list = async function (req, res, next) {
         console.log("no messages");
       };
         // Succesfull
-        console.log(messages)
         res.render("index", {
             title: "Messages",
             user: req.user,
@@ -67,3 +66,18 @@ exports.create_message_post = [
         };
   }
   ]
+
+  // Handle delete message on POST
+  exports.delete_message_post = async (req, res, next) => {
+    try {
+      const messages = await Message.findById(req.body.messageId);
+      if (!messages) {
+        console.log("Couldn't find message");
+      };
+      // Succesfull
+      const deleteMessage = await Message.findByIdAndDelete(req.body.messageId);
+      res.redirect("/");
+    } catch(err) {
+        return next(err);
+    }
+  }

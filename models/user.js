@@ -7,7 +7,8 @@ const UserSchema = new Schema ({
     Lastname: { type: String, required: true, maxLength: 20 },
     Username: { type: String, required: true, maxLength: 20 },
     Password: { type: String, required: true },
-    Membership: {type: Boolean, default: false }
+    Membership: {type: Boolean, default: false },
+    Admin: {type: Boolean, default: false }
 });
 
 // Virtual for user URL

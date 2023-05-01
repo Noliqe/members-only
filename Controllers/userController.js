@@ -47,6 +47,7 @@ exports.user_sign_up_post = [
               res.render("sign-up-form", {
                 title: "Sign up",
                 errors: errors,
+                user: req.user
               });
             return;
           }

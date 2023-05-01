@@ -17,21 +17,42 @@ block content
         button.btn.btn-primary(type='submit') Log in
       
     if user
-      if messages 
-        each message in messages 
-          if user.Membership  
+      if user.Admin
+        if messages 
+          each message in messages  
             ul
               li Username: #{message.Username}
               li Title: #{message.title}
               li Text: #{message.text}
               li Date: #{message.timestamp}
-          else 
-            ul 
-              li Anymouse
-              li Title: #{message.title}
-              li Text: #{message.text}
+              li 
+                form(method="POST" action="/delete")
+                  div.form-group
+                    input#messageId.form-control(type='hidden',name='messageId', required='true', value=message._id )
+                  button.btn.btn-primary(type='submit') Delete
+        else 
+          p no messages
       else 
-        p no messages
+        if messages 
+          each message in messages 
+            if user.Membership  
+              ul
+                li Username: #{message.Username}
+                li Title: #{message.title}
+                li Text: #{message.text}
+                li Date: #{message.timestamp}
+            else 
+              ul 
+                li Anymouse
+                li Title: #{message.title}
+                li Text: #{message.text}
+        else 
+          p no messages
     else 
-      p not logged in
+      if messages 
+        each message in messages 
+          ul 
+            li Anymouse
+            li Title: #{message.title}
+            li Text: #{message.text}
       

@@ -3,8 +3,10 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-
-  form(method="POST" action="")
+  if user 
+    p You're already a user!
+  else 
+    form(method="POST" action="")
     div.form-group
         label(for="firstname") First Name:
         input#firstname.form-controler(type="text" placeholder="John" name="firstname" required="true")
