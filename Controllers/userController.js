@@ -32,7 +32,6 @@ exports.user_sign_up_post = [
        
             // If password and confirm password not same
             // don't allow to sign up and throw error
-            console.log(password + " confirm " + confirmPassword);
             if(password !== confirmPassword){
               throw new Error('Passwords must be same')
             }  
